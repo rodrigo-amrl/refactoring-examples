@@ -5,7 +5,7 @@ namespace App\VideoRentalStore;
 use Exception;
 use NumberFormatter;
 
-class PrintBillOld
+class PrintBill
 {
     function statement($invoice, $plays)
     {
