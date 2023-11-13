@@ -1,6 +1,6 @@
 <?php
 
-namespace App\VideoRentalStore;
+namespace App\VideoRentalStore\Old;
 
 use Exception;
 use NumberFormatter;
@@ -48,6 +48,7 @@ class PrintBill
             $result .= " " . $play['name'] . ": " . $format->formatCurrency($thisAmount / 100, "USD") . " (" . $perf['audience'] . " seats)\n";
             $totalAmount += $thisAmount;
         }
+        print_r($result);die();
 
         $result .= "Amount owed is " . $format->formatCurrency($totalAmount / 100, "USD") . "\n";
         $result .= "You earned " . $volumeCredits . " credits\n";

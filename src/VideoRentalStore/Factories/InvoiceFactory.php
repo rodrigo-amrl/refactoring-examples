@@ -7,7 +7,7 @@ class InvoiceFactory
 
     public static function make()
     {
-        return json_decode('[
+        $decoded = json_decode('[
             {
             "customer": "BigCo",
             "performances": [
@@ -16,7 +16,7 @@ class InvoiceFactory
             "audience": 55
             },
             {
-            "playID": "as­like",
+            "playID": "as-like",
             "audience": 35
             },
             {
@@ -24,6 +24,8 @@ class InvoiceFactory
             "audience": 40
             }]
             }
-            ]');
+            ]',true);
+
+        return $decoded[0];
     }
 }

@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 use App\VideoRentalStore\Factories\InvoiceFactory;
 use App\VideoRentalStore\Factories\PlayFactory;
-use App\VideoRentalStore\PrintBillOld;
+use App\VideoRentalStore\Refactored\PrintBill;
 use PHPUnit\Framework\TestCase;
 
 final class VideoRentalStoreTest extends TestCase
 {
 
-    public function testPrintBillOld(): void
+    public function testPrintBill(): void
     {
-        $printBillOld = new PrintBillOld();
+        $printBillOld = new PrintBill();
         $return = $printBillOld->statement(InvoiceFactory::make(), PlayFactory::make());
 
-        $this->assertStringContainsString($return, 'Amount owed is $0.00');
-        print_r($return);
-        die('asdfasdf');
+        $this->assertStringContainsString('Hamlet: $650.00', $return);
     }
 }
