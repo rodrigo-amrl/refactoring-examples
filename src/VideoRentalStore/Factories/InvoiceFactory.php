@@ -24,7 +24,7 @@ class InvoiceFactory
             "audience": 40
             }]
             }
-            ]',true);
+            ]');
 
         return $decoded[0];
     }
