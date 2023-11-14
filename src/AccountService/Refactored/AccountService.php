@@ -1,7 +1,9 @@
 <?php
 
-namespace App\AccountService\Old;
+namespace App\AccountService\Refactored;
 
+use DateTime;
+use Exception;
 use PDO;
 
 class AccountService
