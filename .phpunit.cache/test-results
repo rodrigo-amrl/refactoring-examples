@@ -1,0 +1,1 @@
+{"version":1,"defects":{"AccountServiceTest::testSignUpAccount":8,"VideoRentalStoreTest::testPrintBill":5},"times":{"AccountServiceTest::testSignUpAccount":0.036,"VideoRentalStoreTest::testPrintBill":0.008}}

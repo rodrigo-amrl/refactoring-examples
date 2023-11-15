@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\VideoRentalStore\Factories\InvoiceFactory;
-use App\VideoRentalStore\Factories\PlayFactory;
+use App\VideoRentalStore\Refactored\Factories\InvoiceFactory;
+use App\VideoRentalStore\Refactored\Factories\PlayFactory;
 use App\VideoRentalStore\Refactored\PrintBill;
 use PHPUnit\Framework\TestCase;
 

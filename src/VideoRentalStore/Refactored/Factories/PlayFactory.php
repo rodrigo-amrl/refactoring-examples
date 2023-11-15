@@ -1,6 +1,6 @@
 <?php
 
-namespace App\VideoRentalStore\Factories;
+namespace App\VideoRentalStore\Refactored\Factories;
 
 
 class PlayFactory

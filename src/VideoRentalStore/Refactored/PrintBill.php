@@ -10,28 +10,54 @@ class PrintBill
     public function __construct(protected object $plays)
     {
     }
-    function statement($invoice)
+    public  function statement($invoice)
     {
-
-        $totalAmount = 0;
-        $volumeCredits = 0;
-        $result = "Statement for " . $invoice->customer . "\n";
-        $format = new NumberFormatter("en_US", NumberFormatter::CURRENCY);
-
-        foreach ($invoice->performances as $perf) {
-            $volumeCredits += max($perf->audience - 30, 0);
-            if ($this->playFor($perf)->type === "comedy") {
-                $volumeCredits += floor($perf->audience / 5);
-            }
-            $result .= " " . $this->playFor($perf)->name . ": " . $format->formatCurrency($this->amountFor($perf) / 100, "USD") . " (" . $perf->audience . " seats)\n";
-            $totalAmount += $this->amountFor($perf);
+        $statement_data = (object)['customer' => $invoice->customer];
+        $statement_data->performances = $invoice->performances;
+        return $this->renderPlainText($statement_data);
+    }
+    private function renderPlainText(object $data)
+    {
+        $result = "Statement for " . $data->customer . "\n";
+        foreach ($data->performances as $perf) {
+            $result .= " " . $this->playFor($perf)->name . ": " . $this->formatNumber($this->amountFor($perf)) . " (" . $perf->audience . " seats)\n";
         }
+        $result .= "Amount owed is " . $this->formatNumber($this->totalAmount($data)) . "\n";
+        $result .= "You earned " . $this->totalVolumeCredits($data) . " credits\n";;
 
-        $result .= "Amount owed is " . $format->formatCurrency($totalAmount / 100, "USD") . "\n";
-        $result .= "You earned " . $volumeCredits . " credits\n";;
         return $result;
     }
-    private function amountFor($performance)
+    private function totalAmount(object $invoice)
+    {
+        $result = 0;
+        foreach ($invoice->performances as $perf) {
+            $result += $this->amountFor($perf);
+        }
+        return $result;
+    }
+    private function totalVolumeCredits(object $invoice)
+    {
+        $result = 0;
+        foreach ($invoice->performances as $perf) {
+            $result = $this->volumeCreditsFor($perf);
+        }
+        return $result;
+    }
+    private function formatNumber(float $number)
+    {
+        $format = new NumberFormatter("en_US", NumberFormatter::CURRENCY);
+        return  $format->formatCurrency($number / 100, "USD");
+    }
+    private function volumeCreditsFor(object $performance)
+    {
+        $resultado = 0;
+        $resultado += max($performance->audience - 30, 0);
+        if ($this->playFor($performance)->type === "comedy") {
+            $resultado += floor($performance->audience / 5);
+        }
+        return $resultado;
+    }
+    private function amountFor(object $performance)
     {
         $result = 0;
         switch ($this->playFor($performance)->type) {
