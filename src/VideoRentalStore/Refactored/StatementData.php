@@ -18,13 +18,6 @@ class StatementData
 
         return $statement_data;
     }
-    private function enrichPerformance(object $performance)
-    {
-        $performance->play = $this->playFor($performance);
-        $performance->amount = $this->amountFor($performance);
-        $performance->volumeCredits = $this->volumeCreditsFor($performance);
-        return (object) $performance;
-    }
     private function totalAmount(object $data)
     {
         return array_reduce($data->performances, fn ($result, $performance): float => $result += $performance->amount, 0);
@@ -42,29 +35,16 @@ class StatementData
         }
         return $resultado;
     }
-    private function amountFor(object $performance)
+    private function enrichPerformance(object $performance)
     {
-        $result = 0;
-        switch ($performance->play->type) {
-
-            case "tragedy":
-                $result = 40000;
-                if ($performance->audience > 30) {
-                    $result += 1000 * ($performance->audience - 30);
-                }
-                break;
-            case "comedy":
-                $result = 30000;
-                if ($performance->audience > 20) {
-                    $result += 10000 + 500 * ($performance->audience - 20);
-                }
-                $result += 300 * $performance->audience;
-                break;
-            default:
-                throw new Exception("unknown type: " . $performance->play->type);
-        }
-        return $result;
+        $performanceCalculator = new PerformanceCalculator($performance, $this->playFor($performance));
+        $performance->play = $performanceCalculator->play;
+        $performance->amount = $performanceCalculator->getAmount();
+        $performance->volumeCredits = $this->volumeCreditsFor($performance);
+        return (object) $performance;
     }
+
+
     private function playFor($performance)
     {
         $plays_array = (array) $this->plays;
