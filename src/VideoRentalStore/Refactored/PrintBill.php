@@ -10,28 +10,38 @@ class PrintBill
     public function __construct(protected object $plays)
     {
     }
+
     public  function statement($invoice)
     {
         $statement_data = (object)['customer' => $invoice->customer];
-        $statement_data->performances = $invoice->performances;
+        $statement_data->performances = array_map('self::makePerformance', $invoice->performances);
+
         return $this->renderPlainText($statement_data);
+    }
+    private function makePerformance(object $performance)
+    {
+        $performance->play = $this->playFor($performance);
+        $performance->amount = $this->amountFor($performance);
+        $performance->volumeCredits = $this->volumeCreditsFor($performance);
+        return (object) $performance;
     }
     private function renderPlainText(object $data)
     {
         $result = "Statement for " . $data->customer . "\n";
         foreach ($data->performances as $perf) {
-            $result .= " " . $this->playFor($perf)->name . ": " . $this->formatNumber($this->amountFor($perf)) . " (" . $perf->audience . " seats)\n";
+            $result .= " " . $perf->play->name . ": " . $this->formatNumber($perf->amount) . " (" . $perf->audience . " seats)\n";
         }
         $result .= "Amount owed is " . $this->formatNumber($this->totalAmount($data)) . "\n";
         $result .= "You earned " . $this->totalVolumeCredits($data) . " credits\n";;
 
         return $result;
     }
+
     private function totalAmount(object $invoice)
     {
         $result = 0;
         foreach ($invoice->performances as $perf) {
-            $result += $this->amountFor($perf);
+            $result += $perf->amount;
         }
         return $result;
     }
@@ -39,7 +49,7 @@ class PrintBill
     {
         $result = 0;
         foreach ($invoice->performances as $perf) {
-            $result = $this->volumeCreditsFor($perf);
+            $result = $perf->volumeCredits;
         }
         return $result;
     }
@@ -52,7 +62,7 @@ class PrintBill
     {
         $resultado = 0;
         $resultado += max($performance->audience - 30, 0);
-        if ($this->playFor($performance)->type === "comedy") {
+        if ($performance->play->type === "comedy") {
             $resultado += floor($performance->audience / 5);
         }
         return $resultado;
@@ -60,7 +70,7 @@ class PrintBill
     private function amountFor(object $performance)
     {
         $result = 0;
-        switch ($this->playFor($performance)->type) {
+        switch ($performance->play->type) {
 
             case "tragedy":
                 $result = 40000;
@@ -76,7 +86,7 @@ class PrintBill
                 $result += 300 * $performance->audience;
                 break;
             default:
-                throw new Exception("unknown type: " . $this->playFor($performance)->type);
+                throw new Exception("unknown type: " . $performance->play->type);
         }
         return $result;
     }
