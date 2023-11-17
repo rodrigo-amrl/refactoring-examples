@@ -3,60 +3,35 @@
 namespace App\VideoRentalStore\Refactored;
 
 use Exception;
-use NumberFormatter;
 
-class PrintBill
+class StatementData
 {
     public function __construct(protected object $plays)
     {
     }
-
-    public  function statement($invoice)
+    public function create(object $invoice)
     {
         $statement_data = (object)['customer' => $invoice->customer];
-        $statement_data->performances = array_map('self::makePerformance', $invoice->performances);
+        $statement_data->performances = array_map('self::enrichPerformance', $invoice->performances);
+        $statement_data->totalAmount = $this->totalAmount($statement_data);
+        $statement_data->totalVolumeCredits = $this->totalVolumeCredits($statement_data);
 
-        return $this->renderPlainText($statement_data);
+        return $statement_data;
     }
-    private function makePerformance(object $performance)
+    private function enrichPerformance(object $performance)
     {
         $performance->play = $this->playFor($performance);
         $performance->amount = $this->amountFor($performance);
         $performance->volumeCredits = $this->volumeCreditsFor($performance);
         return (object) $performance;
     }
-    private function renderPlainText(object $data)
+    private function totalAmount(object $data)
     {
-        $result = "Statement for " . $data->customer . "\n";
-        foreach ($data->performances as $perf) {
-            $result .= " " . $perf->play->name . ": " . $this->formatNumber($perf->amount) . " (" . $perf->audience . " seats)\n";
-        }
-        $result .= "Amount owed is " . $this->formatNumber($this->totalAmount($data)) . "\n";
-        $result .= "You earned " . $this->totalVolumeCredits($data) . " credits\n";;
-
-        return $result;
+        return array_reduce($data->performances, fn ($result, $performance): float => $result += $performance->amount, 0);
     }
-
-    private function totalAmount(object $invoice)
+    private function totalVolumeCredits(object $data)
     {
-        $result = 0;
-        foreach ($invoice->performances as $perf) {
-            $result += $perf->amount;
-        }
-        return $result;
-    }
-    private function totalVolumeCredits(object $invoice)
-    {
-        $result = 0;
-        foreach ($invoice->performances as $perf) {
-            $result = $perf->volumeCredits;
-        }
-        return $result;
-    }
-    private function formatNumber(float $number)
-    {
-        $format = new NumberFormatter("en_US", NumberFormatter::CURRENCY);
-        return  $format->formatCurrency($number / 100, "USD");
+        return array_reduce($data->performances, fn ($result, $performance): float => $result += $performance->amount, 0);
     }
     private function volumeCreditsFor(object $performance)
     {
