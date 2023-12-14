@@ -66,11 +66,12 @@ class Province
     {
         $remainingDemand = $this->demand;
         $result  = 0;
-        usort($this->producers, fn ($a, $b) => $a['cost'] - $b['cost']);
+        // usort((array) $this->producers, fn ($a, $b) => $a['cost'] - $b['cost']);
+
         foreach ($this->producers as $producer) {
-            $constribuition = min([$remainingDemand, $producer['production']]);
+            $constribuition = min([$remainingDemand, $producer->getProduction()]);
             $remainingDemand -= $constribuition;
-            $result += $constribuition * $producer['cost'];
+            $result += $constribuition * $producer->getCost();
         }
         return $result;
     }
