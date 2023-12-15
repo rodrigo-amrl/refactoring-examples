@@ -8,7 +8,7 @@ class Producer
         protected Province $province,
         protected float $cost,
         protected string $name,
-        protected float $production
+        public float $production
     ) {
     }
     public function getName()

@@ -5,12 +5,12 @@ namespace App\ProdutionPlan;
 
 class Province
 {
-    private array $producers = [];
+    public array $producers = [];
     public function __construct(
-        protected readonly string $name,
+        protected  string $name,
         array $producers,
-        protected readonly int $demand,
-        protected readonly float $price,
+        protected  int|Null $demand,
+        protected  float $price,
         public  float $total_production  = 0,
 
     ) {

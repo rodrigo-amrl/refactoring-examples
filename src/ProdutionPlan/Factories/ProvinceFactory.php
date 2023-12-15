@@ -18,4 +18,22 @@ class ProvinceFactory
             'price' => 20
         ];
     }
+    public static function makeNoProducers()
+    {
+        return [
+            'name' => "No producers",
+            'producers' => [],
+            'demand' => 30,
+            'price' => 20
+        ];
+    }
+    public static function makeStringProducers()
+    {
+        return [
+            'name' => "No producers",
+            'producers' => "",
+            'demand' => 30,
+            'price' => 20
+        ];
+    }
 }
