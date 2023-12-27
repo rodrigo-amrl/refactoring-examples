@@ -2,8 +2,6 @@
 
 namespace App\CatalogRefactoring\ExtractFunction;
 
-// Passos
-//  Cria uma nova função e nomeie de acordo com a intenção da função, nomeie pelo que ela faz
 
 /**
  * Extract Function
