@@ -23,7 +23,6 @@ class PersonOld
     {
         return $this->name;
     }
-    //bad: $person->getDepartament()->getManager();
     public function getDepartament()
     {
         return $this->departament;

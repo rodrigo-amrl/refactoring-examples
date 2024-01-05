@@ -31,7 +31,6 @@ class PersonRefactored
     {
         $this->departament = $departament;
     }
-    //correct: $person->getManager();
     public function getManager()
     {
         return $this->departament->getManager();
