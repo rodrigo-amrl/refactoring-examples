@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CatalogRefactoring\MoveField;
+namespace App\CatalogRefactoring\MoveField\Customer;
 
 /**
  * Move Field
@@ -16,7 +16,7 @@ namespace App\CatalogRefactoring\MoveField;
  * - Remova o campo de origem
  */
 
-class CustomerOld
+class CustomerRefactored
 {
     private $contract;
 
@@ -24,18 +24,22 @@ class CustomerOld
         private string $name,
         private float $discount_rate
     ) {
-        $this->contract = new CustomerContract(date('Y-m-d'));
+        $this->contract = new CustomerContractRefactored(date('Y-m-d'), $discount_rate);
     }
     public function getDiscountRate()
     {
-        return $this->discount_rate;
+        return $this->contract->getDiscountRate();
+    }
+    public function setDiscountRate($value)
+    {
+        $this->contract->setDiscountRate($value);
     }
     public function becomePreferred()
     {
-        return $this->discount_rate += 0.03;
+        return $this->contract->setDiscountRate($this->getDiscountRate() + 0.03);
     }
     public function ApplyDiscount($amount)
     {
-        return $amount->subtract($amount->multiply($this->discount_rate));
+        return $amount->subtract($amount->multiply($this->getDiscountRate()));
     }
 }

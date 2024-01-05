@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CatalogRefactoring\MoveField;
+namespace App\CatalogRefactoring\MoveField\Customer;
 
 class CustomerContractRefactored
 {
