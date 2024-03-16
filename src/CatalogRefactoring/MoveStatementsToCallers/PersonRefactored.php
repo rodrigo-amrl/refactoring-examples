@@ -32,9 +32,6 @@ class PersonRefactored
             echo "</div>\n";
         }
     }
-    private function recentDateCutOff()
-    {
-    }
     private function emitPhotoData($photo)
     {
         echo "<p>{$photo['title']}</p>";

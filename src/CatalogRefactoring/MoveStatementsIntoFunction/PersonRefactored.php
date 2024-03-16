@@ -25,9 +25,9 @@ class PersonRefactored
         $result[] = $this->emitPhotoData($person['photo']);
         return implode("\n", $result);
     }
-    private function photoDiv($p)
+    private function photoDiv($photo)
     {
-        return "<div>{$this->emitPhotoData($p)}</div>";
+        return "<div>{$this->emitPhotoData($photo)}</div>";
     }
     private function emitPhotoData($photo)
     {
