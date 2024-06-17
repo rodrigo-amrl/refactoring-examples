@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CatalogRefactoring\IntroduceSpecialCase;
+namespace App\CatalogRefactoring\IntroduceSpecialCase\Example1;
 
 use Exception;
 

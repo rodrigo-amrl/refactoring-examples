@@ -1,7 +1,6 @@
 <?php
 
-namespace App\CatalogRefactoring\IntroduceSpecialCase;
-
+namespace App\CatalogRefactoring\IntroduceSpecialCase\Example2;
 
 /**
  * Introduce Special Case
@@ -21,15 +20,15 @@ namespace App\CatalogRefactoring\IntroduceSpecialCase;
  */
 class SiteRefactored
 {
-
     private CustomerRefactored $customer;
+    const BASIC_BILLING_PLAN = "start";
 
     public function __construct()
     {
     }
     public function getCustomer()
     {
-        return empty($this->customer) ? new UnknownCustomer : $this->customer;
+        return empty($this->customer) ? $this->createUnknownCustomer() : $this->customer;
     }
     public function getCustomerName()
     {
@@ -39,9 +38,16 @@ class SiteRefactored
     {
         return $this->getCustomer()->getBillingPlan();
     }
-    public function setCustomerBillingPlan($new_plan)
+    public function getWeeksDelinquent()
     {
-        $this->getCustomer()->setBillingPlan($new_plan);
-        return $this->getCustomerBillingPlan();
+        return   $this->getCustomer()->getPaymentHistory()->weeks_delinquent_in_last_year;
+    }
+    public function createUnknownCustomer()
+    {
+        return new CustomerRefactored(
+            name: "occupant",
+            billing_plan: self::BASIC_BILLING_PLAN,
+            payment_history: ['weeksDelinquentInLastYear' => 0]
+        );
     }
 }

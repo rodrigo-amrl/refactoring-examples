@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CatalogRefactoring\IntroduceSpecialCase;
+namespace App\CatalogRefactoring\IntroduceSpecialCase\Example2;
 
 use App\CatalogRefactoring\ChangeValueToReference\Customer;
 
@@ -22,7 +22,6 @@ use App\CatalogRefactoring\ChangeValueToReference\Customer;
  */
 class SiteOld
 {
-
     private CustomerOld $customer;
     const BASIC_BILLING_PLAN = "start";
 
@@ -31,28 +30,26 @@ class SiteOld
     }
     public function getCustomer()
     {
-        return $this->customer;
+        return $this->customer ?? null;
     }
     public function getCustomerName()
     {
+        $customer = $this->getCustomer();
         $customer_name = '';
 
-        if (empty($this->customer))
+        if (empty($customer))
             $customer_name = "occupant";
         else
-            $customer_name = $this->customer->getName();
+            $customer_name = $customer->getName();
 
         return $customer_name;
     }
     public function getCustomerBillingPlan()
     {
-        return empty($this->customer) ? self::BASIC_BILLING_PLAN : $this->customer->getBillingPlan();
+        return empty($this->getCustomer()) ? self::BASIC_BILLING_PLAN :  $this->getCustomer()->getBillingPlan();
     }
-    public function setCustomerBillingPlan($new_plan)
+    public function getWeeksDelinquent()
     {
-        if (!empty($this->customer))
-            $this->customer->setBillingPlan($new_plan);
-
-        return $this->getCustomerBillingPlan();
+        return empty($this->getCustomer()) ? 0 :  $this->getCustomer()->getPaymentHistory()->weeks_delinquent_in_last_year;
     }
 }

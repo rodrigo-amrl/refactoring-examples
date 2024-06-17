@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CatalogRefactoring\IntroduceSpecialCase;
+namespace App\CatalogRefactoring\IntroduceSpecialCase\Example1;
 
 
 /**
@@ -19,7 +19,7 @@ namespace App\CatalogRefactoring\IntroduceSpecialCase;
  * 8 - Como a classe de caso especial geralmente retorna valores fixos para solicitações simples, elas podem ser tratadas tornando o caso especial um registro literal
  * 9 - Use a Função Inline (115) na função de comparação de casos especiais para os locais onde ela ainda é necessária
  */
-class CustomerRefactored
+class CustomerOld
 {
     public function __construct(
         private string $name,
@@ -41,9 +41,4 @@ class CustomerRefactored
     public function getPaymentHistory()
     {
     }
-    public function isUnknown()
-    {
-        return false;
-    }
-    
 }

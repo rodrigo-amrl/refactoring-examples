@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CatalogRefactoring\IntroduceSpecialCase;
+namespace App\CatalogRefactoring\IntroduceSpecialCase\Example3;
 
 
 /**
@@ -19,26 +19,35 @@ namespace App\CatalogRefactoring\IntroduceSpecialCase;
  * 8 - Como a classe de caso especial geralmente retorna valores fixos para solicitações simples, elas podem ser tratadas tornando o caso especial um registro literal
  * 9 - Use a Função Inline (115) na função de comparação de casos especiais para os locais onde ela ainda é necessária
  */
-class CustomerOld
+class SiteRefactored
 {
-    public function __construct(
-        private string $name,
-        private string $billing_plan = ''
-    ) {
-    }
-    public function getName()
+    const BASIC_BILLING_PLAN = "start";
+
+    public function getCustomerName()
     {
-        return $this->name;
+        $customer = $this->enrichSite(CustomerOld::getData());
+        return $customer->name;
     }
-    public function getBillingPlan()
+    public function getCustomerBillingPlan()
     {
-        return $this->billing_plan;
+        $customer = $this->enrichSite(CustomerOld::getData());
+        return $customer->billing_plan;
     }
-    public function setBillingPlan($arg)
+    public function getWeeksDelinquent()
     {
-        $this->billing_plan = $arg;
+        $customer = $this->enrichSite(CustomerOld::getData());
+        return  $customer->payment_history->weeks_delinquent_in_last_year;
     }
-    public function getPaymentHistory()
+    public function enrichSite($data)
     {
+        $unknown_customer = (object) [
+            'name' => "occupant",
+            'billing_plan' => self::BASIC_BILLING_PLAN,
+            'payment_history' => (object) [
+                'weeks_delinquent_in_last_year' => 0
+            ],
+        ];
+
+        return empty($data->customer) ? $unknown_customer : $data->customer;
     }
 }
