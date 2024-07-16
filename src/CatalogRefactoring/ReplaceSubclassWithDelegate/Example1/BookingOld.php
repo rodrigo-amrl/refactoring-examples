@@ -1,8 +1,7 @@
 <?php
 
 
-namespace App\CatalogRefactoring\ReplaceSubclassWithDelegate;
-
+namespace App\CatalogRefactoring\ReplaceSubclassWithDelegate\Example1;
 
 /*
 Replace Subclass With Delegate
@@ -67,25 +66,21 @@ construtor da superclasse
 
 */
 
-class PremiumBookingOld extends BookingOld
+class BookingOld
 {
     public function __construct(
-        $show,
-        $date,
-        protected  object $extras
+        protected object $show,
+        protected string $date
     ) {
-        parent::__construct($show, $date);
     }
     public function getBasePrice()
     {
-        return round(parent::getBasePrice() + $this->extras->premium_fee);
+        $result = $this->show->price;
+        if ($this->isPeakDay()) $result += round($result * 0.15);
+        return $result;
     }
-    public function hasTalkBack()
+    protected function isPeakDay()
     {
-        return property_exists($this->show, 'talkback');
-    }
-    public function hasDinner()
-    {
-        return property_exists($this->show, 'dinner') && !$this->isPeakDay();
+        return $this->date == date('Y-m-d');
     }
 }

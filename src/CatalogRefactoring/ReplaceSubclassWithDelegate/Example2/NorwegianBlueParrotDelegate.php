@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\CatalogRefactoring\ReplaceSubclassWithDelegate;
+namespace App\CatalogRefactoring\ReplaceSubclassWithDelegate\Example2;
 
 /*
 Replace Subclass With Delegate
@@ -66,42 +66,25 @@ construtor da superclasse
 
 */
 
-class BookingRefactored
+class NorwegianBlueParrotDelegate extends BirdOld
 {
-    private PremiumBookingDelegate $premium_delegate;
-    public function __construct(
-        protected object $show,
-        protected string $date,
-        protected object|null $extras = null
+    private int $voltage;
+    private bool $is_nailed;
 
+    public function __construct(
+        protected object $data,
+        protected BirdRefactored $bird
     ) {
+        $this->voltage = $data->voltage;
+        $this->is_nailed = $data->is_nailed;
     }
-    public function getBasePrice()
+    public function getPlumage()
     {
-        return isset($this->premium_delegate) ? $this->privateBasePrice() : $this->premium_delegate->getBasePrice();
+        if ($this->voltage > 100) return "scorched";
+        else return $this->bird->plumage ?? "beautiful";
     }
-    public function privateBasePrice()
+    public function airSpeedVelocity()
     {
-        $result = $this->show->price;
-        if ($this->isPeakDay()) $result += round($result * 0.15);
-        return $result;
-    }
-    public function hasDinner()
-    {
-        return !$this->premium_delegate ? null : $this->premium_delegate->hasDinner();
-    }
-    protected function isPeakDay()
-    {
-        return $this->date == date('Y-m-d');
-    }
-    public static function createPremiumBook(object $show, string $date, object $extras)
-    {
-        $book = new BookingRefactored($show, $date, $extras);
-        $book->bePremium($extras);
-        return $book;
-    }
-    public function bePremium($extras)
-    {
-        $this->premium_delegate = new PremiumBookingDelegate($this, $extras);
+        return $this->is_nailed ? 0 : 10 + $this->voltage / 10;
     }
 }

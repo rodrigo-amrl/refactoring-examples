@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\CatalogRefactoring\ReplaceSubclassWithDelegate;
+namespace App\CatalogRefactoring\ReplaceSubclassWithDelegate\Example2;
 
 /*
 Replace Subclass With Delegate
@@ -66,21 +66,21 @@ construtor da superclasse
 
 */
 
-class BookingOld
+class SpeciesDelegate extends BirdOld
 {
+
+
     public function __construct(
-        protected object $show,
-        protected string $date
+        protected object $data,
+        protected BirdRefactored $bird
     ) {
     }
-    public function getBasePrice()
+    public function getPlumage()
     {
-        $result = $this->show->price;
-        if ($this->isPeakDay()) $result += round($result * 0.15);
-        return $result;
+        return $this->bird->plumage ?? "average";
     }
-    protected function isPeakDay()
+    public function airSpeedVelocity()
     {
-        return $this->date == date('Y-m-d');
+        return null;
     }
 }

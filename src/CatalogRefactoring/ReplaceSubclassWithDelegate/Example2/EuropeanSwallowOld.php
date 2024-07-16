@@ -1,8 +1,7 @@
 <?php
 
 
-namespace App\CatalogRefactoring\ReplaceSubclassWithDelegate;
-
+namespace App\CatalogRefactoring\ReplaceSubclassWithDelegate\Example2;
 
 /*
 Replace Subclass With Delegate
@@ -67,23 +66,11 @@ construtor da superclasse
 
 */
 
-class PremiumBookingDelegate
+class EuropeanSwallowOld extends BirdOld
 {
-    public function __construct(
-        protected object $book,
-        protected object $extras
-    ) {
-    }
-    public function hasTalkBack()
+
+    public function airSpeedVelocity()
     {
-        return property_exists($this->book->show, 'talkback');
-    }
-    public function hasDinner()
-    {
-        return property_exists($this->book->show, 'dinner') && !$this->book->isPeakDay();
-    }
-    public function getBasePrice()
-    {
-        return round($this->book->privateBasePrice() + $this->extras->premium_fee);
+        return 35;
     }
 }
